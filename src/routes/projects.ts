@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { pool } from "../db";
 import { AuthRequest, requireAuth } from "../middleware/auth";
-import { EMAIL_RE, isNonEmpty } from "../validation";
+import { EMAIL_RE, isNonEmpty, MAX_OPIS } from "../validation";
 
 const router = Router();
 router.use(requireAuth);
@@ -32,6 +32,8 @@ router.get("/", async (req: AuthRequest, res) => {
 router.post("/", async (req: AuthRequest, res) => {
   const { naziv, opis } = req.body ?? {};
   if (!isNonEmpty(naziv, 100)) return res.status(400).json({ error: "Naziv je obavezan (max 100)" });
+  if (opis != null && String(opis).length > MAX_OPIS)
+    return res.status(400).json({ error: `Opis moze imati najvise ${MAX_OPIS} karaktera` });
   const conn = await pool.getConnection();
   try {
     await conn.beginTransaction();

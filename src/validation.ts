@@ -7,3 +7,5 @@ export const isNonEmpty = (v: unknown, max: number): v is string =>
 
 export const STATUSES = ["To Do", "Doing", "Done"] as const;
 export type Status = (typeof STATUSES)[number];
+
+export const MAX_OPIS = 2000;
