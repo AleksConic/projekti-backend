@@ -2,7 +2,7 @@ import { Router } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { pool } from "../db";
-import { EMAIL_RE, NAME_RE } from "../validation";
+import { EMAIL_RE, NAME_RE, MIN_LOZINKA } from "../validation";
 
 const router = Router();
 
@@ -11,8 +11,8 @@ router.post("/register", async (req, res) => {
   if (!NAME_RE.test(ime ?? "") || !NAME_RE.test(prezime ?? ""))
     return res.status(400).json({ error: "Neispravno ime ili prezime" });
   if (!EMAIL_RE.test(email ?? "")) return res.status(400).json({ error: "Neispravan email" });
-  if (typeof lozinka !== "string" || lozinka.length < 8)
-    return res.status(400).json({ error: "Lozinka mora imati najmanje 8 karaktera" });
+  if (typeof lozinka !== "string" || lozinka.length < MIN_LOZINKA)
+    return res.status(400).json({ error: `Lozinka mora imati najmanje ${MIN_LOZINKA} karaktera` });
   try {
     const hash = await bcrypt.hash(lozinka, 10);
     const [r]: any = await pool.query(
