@@ -9,3 +9,4 @@ export const STATUSES = ["To Do", "Doing", "Done"] as const;
 export type Status = (typeof STATUSES)[number];
 
 export const MIN_LOZINKA = 8;
+export const MAX_OPIS = 2000;
